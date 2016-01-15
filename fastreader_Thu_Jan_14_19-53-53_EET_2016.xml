@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fastreader" default="all">
+  
+  
+  <property file="fastreader.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.swc"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
+    <include name="*.egg"/>
+    <include name="*.ane"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module FastReader -->
+  
+  <dirname property="module.fastreader.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.fastreader" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.fastreader" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.fastreader" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.fastreader" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="fastreader.output.dir" value="${module.fastreader.basedir}/out/production/FastReader"/>
+  <property name="fastreader.testoutput.dir" value="${module.fastreader.basedir}/out/test/FastReader"/>
+  
+  <path id="fastreader.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="fastreader.module.production.classpath">
+    <path refid="${module.jdk.classpath.fastreader}"/>
+  </path>
+  
+  <path id="fastreader.runtime.production.module.classpath">
+    <pathelement location="${fastreader.output.dir}"/>
+  </path>
+  
+  <path id="fastreader.module.classpath">
+    <path refid="${module.jdk.classpath.fastreader}"/>
+    <pathelement location="${fastreader.output.dir}"/>
+  </path>
+  
+  <path id="fastreader.runtime.module.classpath">
+    <pathelement location="${fastreader.testoutput.dir}"/>
+    <pathelement location="${fastreader.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.fastreader">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.fastreader">
+    <patternset refid="excluded.from.module.fastreader"/>
+  </patternset>
+  
+  <path id="fastreader.module.sourcepath">
+    <dirset dir="${module.fastreader.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.fastreader" depends="compile.module.fastreader.production,compile.module.fastreader.tests" description="Compile module FastReader"/>
+  
+  <target name="compile.module.fastreader.production" depends="register.custom.compilers" description="Compile module FastReader; production classes">
+    <mkdir dir="${fastreader.output.dir}"/>
+    <javac2 destdir="${fastreader.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.fastreader}/javac">
+      <compilerarg line="${compiler.args.fastreader}"/>
+      <bootclasspath refid="fastreader.module.bootclasspath"/>
+      <classpath refid="fastreader.module.production.classpath"/>
+      <src refid="fastreader.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.fastreader"/>
+    </javac2>
+    
+    <copy todir="${fastreader.output.dir}">
+      <fileset dir="${module.fastreader.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.fastreader.tests" depends="register.custom.compilers,compile.module.fastreader.production" description="compile module FastReader; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.fastreader" description="cleanup module">
+    <delete dir="${fastreader.output.dir}"/>
+    <delete dir="${fastreader.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.fastreader, clean.artifact.fastreader" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.fastreader" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.fastreader" value="${basedir}/out/artifacts/FastReader"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="artifact.temp.output.FastReader" value="${artifacts.temp.dir}/FastReader.jar"/>
+    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${jdk.home.1.8}/lib/ant-javafx.jar"/>
+  </target>
+  
+  <target name="clean.artifact.fastreader" description="clean FastReader artifact output">
+    <delete dir="${artifact.output.fastreader}"/>
+  </target>
+  
+  <target name="artifact.fastreader" depends="init.artifacts, compile.module.fastreader" description="Build &#39;FastReader&#39; artifact" xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <mkdir dir="${artifact.output.fastreader}"/>
+    <copy todir="${artifact.temp.output.FastReader}">
+      <fileset dir="${fastreader.output.dir}"/>
+    </copy>
+    <fx:fileset id="all_but_FastReader" dir="${artifact.temp.output.FastReader}" includes="**/*.jar">
+      <exclude name="FastReader.jar"/>
+    </fx:fileset>
+    <fx:fileset id="all_FastReader" dir="${artifact.temp.output.FastReader}" includes="**/*.jar"/>
+    <fx:application id="FastReader_id" name="FastReader" mainClass="Main"/>
+    <fx:jar destfile="${artifact.temp.output.FastReader}/FastReader.jar">
+      <fx:application refid="FastReader_id"/>
+      <fileset dir="${artifact.temp.output.FastReader}" excludes="**/*.jar"/>
+      <fx:resources>
+        <fx:fileset refid="all_but_FastReader"/>
+      </fx:resources>
+      <manifest/>
+    </fx:jar>
+    <fx:deploy width="600" height="400" updatemode="background" outdir="${artifact.temp.output.FastReader}/deploy" outfile="FastReader" nativeBundles="deb">
+      <fx:application refid="FastReader_id"/>
+      <fx:info title="FastReader" vendor="Elavrius"/>
+      <fx:resources>
+        <fx:fileset refid="all_FastReader"/>
+      </fx:resources>
+    </fx:deploy>
+    <copy todir="${artifact.output.fastreader}">
+      <fileset dir="${artifact.temp.output.FastReader}/deploy"/>
+    </copy>
+    <delete includeemptydirs="true">
+      <fileset dir="${artifact.temp.output.FastReader}"/>
+    </delete>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.fastreader" description="Build all artifacts">
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>
